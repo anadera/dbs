@@ -2,4 +2,8 @@ from MongoScheme import MongoScheme
 from PostgresScheme import PostgresScheme
 
 mongo = MongoScheme('lab1_mongodb')
-postgres = PostgresScheme('postgresql://postgres:postgres@localhost:5432/postgresdb', "_postgres_scheme")
+mongo.drop_db()
+mongo.create_gen_db()
+
+postgres = PostgresScheme('postgresql://postgres:postgres@localhost:5432/postgresdb')
+postgres.generate_data(1, 1)

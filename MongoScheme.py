@@ -9,8 +9,6 @@ class MongoScheme:
     def __init__(self, dbname):
         self.client = MongoClient()
         self.db = self.client[dbname]
-        MongoScheme.drop_db(self)
-        MongoScheme.create_gen_db(self)
 
     # campuses
     def create_gen_campus(self):
