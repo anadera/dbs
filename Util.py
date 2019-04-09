@@ -1,5 +1,6 @@
 from random import randrange
 from datetime import timedelta
+from datetime import datetime
 from random import choice
 from string import ascii_letters
 
@@ -13,6 +14,10 @@ def random_date(start, end):
     int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
     random_second = randrange(int_delta)
     return start + timedelta(seconds=random_second)
+
+
+def postgres_date(d):
+    return d.strftime("%Y-%m-%d")
 
 
 def generate_string(size):

@@ -2,6 +2,7 @@ from Configuration import Configuration
 from Util import generate_name_string
 from Util import generate_person_name_string
 from Util import random_date
+from Util import postgres_date
 from random import randrange
 from datetime import datetime
 
@@ -16,7 +17,7 @@ class PostgresScheme:
         self.Student_postgres = self.postgres_config.Base.classes.student
         self.Semester_postgres = self.postgres_config.Base.classes.semester
         self.Subject_postgres = self.postgres_config.Base.classes.subject
-        self.Subject_in_semester = self.postgres_config.Base.classes.subject_in_semester
+        self.Subject_in_semester_postgres = self.postgres_config.Base.classes.subject_in_semester
         self.Teacher_postgres = self.postgres_config.Base.classes.teacher
         self.Teacher_subject_postgres = self.postgres_config.Base.classes.teacher_subject
         self.Subject_major_postgres = self.postgres_config.Base.classes.subject_major
@@ -38,9 +39,9 @@ class PostgresScheme:
         self.postgres_config.session.query(self.Scores_postgres).delete()
 
     def gen_university(self):
-        university = [self.University_postgres(university_id=self.id,
+        university = self.University_postgres(university_id=self.id,
                                                university_name="ITMO",
-                                               university_standart_type="standart")]
+                                               university_standart_type="standart")
         self.id = self.id + 1
         return university
 
@@ -72,7 +73,7 @@ class PostgresScheme:
         self.id = self.id + 1
         return student
 
-    def gen_semester(self,sem_major_id):
+    def gen_semester(self, sem_major_id):
         semester = [self.Semester_postgres(semester_id=self.id,
                                            semester_num=randrange(1, 8),
                                            sem_major_id=sem_major_id)]
@@ -87,13 +88,13 @@ class PostgresScheme:
 
     def gen_subject_in_semester(self, sis_subject_id, sis_semester_id):
         ctype = ["exam", "credit"]
-        subject_in_semester = [self.Subject_in_semester(sis_id=self.id,
-                                                        lectures=randrange(0, 20),
-                                                        practices=randrange(0, 40),
-                                                        labs=randrange(0, 20),
-                                                        control_type=ctype[randrange(len(ctype))],
-                                                        sis_subject_id=sis_subject_id,
-                                                        sis_semester_id=sis_semester_id)]
+        subject_in_semester = [self.Subject_in_semester_postgres(sis_id=self.id,
+                                                                 lectures=randrange(0, 20),
+                                                                 practises=randrange(0, 40),
+                                                                 labs=randrange(0, 20),
+                                                                 control_type=ctype[randrange(len(ctype))],
+                                                                 sis_subject_id=sis_subject_id,
+                                                                 sis_semester_id=sis_semester_id)]
         self.id = self.id + 1
         return subject_in_semester
 
@@ -107,8 +108,9 @@ class PostgresScheme:
     def gen_scores(self, sc_teacher_id, sc_subject_id, sc_student_id, sc_semester_id):
         score = [self.Scores_postgres(score_id=self.id,
                                       score=randrange(100),
-                                      scoreDate=random_date(datetime.strptime('01/01/2014 01:00 AM', '%m/%d/%Y %I:%M %p'),
-                                                              datetime.strptime('01/01/2019 01:00 AM', '%m/%d/%Y %I:%M %p')),
+                                      scoredate=postgres_date(random_date(
+                                          datetime.strptime('01/01/2014 01:00 AM', '%m/%d/%Y %I:%M %p'),
+                                          datetime.strptime('01/01/2019 01:00 AM', '%m/%d/%Y %I:%M %p'))),
                                       sc_teacher_id=sc_teacher_id,
                                       sc_subject_id=sc_subject_id,
                                       sc_student_id=sc_student_id,
@@ -120,7 +122,7 @@ class PostgresScheme:
         teacher_subject = [self.Teacher_subject_postgres(t_sub_id=self.id,
                                                          t_sub_teacher_id=t_sub_teacher_id,
                                                          t_sub_subject_id=t_sub_subject_id)]
-        self.id = self + 1
+        self.id = self.id + 1
         return teacher_subject
 
     def gen_subject_major(self, sub_m_subject_id, sub_m_major_id):
@@ -129,3 +131,61 @@ class PostgresScheme:
                                                      sub_m_major_id=sub_m_major_id)]
         self.id = self.id + 1
         return subject_major
+
+    def generate_data(self):
+        faculties = []
+        departments = []
+        majors = []
+        students = []
+        semesters = []
+        subjects = []
+        subjects_in_semester = []
+        teachers = []
+        scores = []
+        teachers_subject = []
+        subjects_major = []
+        tmp_university_id = self.id
+        universities = self.gen_university()
+        for f_r in range(10):
+            tmp_faculty_id = self.id
+            faculties.append(self.gen_faculty(tmp_university_id))
+            for d_r in range(4):
+                tmp_deprtment_id = self.id
+                departments.append(self.gen_department(tmp_faculty_id))
+                for m_r in range(5):
+                    tmp_major_id = self.id
+                    majors.append(self.gen_major(tmp_deprtment_id))
+                    for stu_r in range(5):
+                        tmp_student_id = self.id
+                        students.append(self.gen_student(tmp_major_id))
+                    for sem_r in range(8):
+                        tmp_semester_id = self.id
+                        semesters.append(tmp_major_id)
+                    for sub_r in range(5):
+                        tmp_subject_id = self.id
+                        subjects.append(self.gen_subject())
+                        subjects_major.append(self.gen_subject_major(tmp_subject_id, tmp_major_id))
+                    for sis_r in range(8):
+                        tmp_sis_id = self.id
+                        subjects_in_semester.append(self.gen_subject_in_semester(tmp_subject_id, tmp_semester_id))
+                for t_r in range(10):
+                    tmp_teacher_id = self.id
+                    teachers.append(self.gen_teacher(tmp_deprtment_id))
+                    for sc_r in range(2):
+                        scores.append(
+                            self.gen_scores(tmp_teacher_id, tmp_subject_id, tmp_student_id, tmp_semester_id))
+                    teachers_subject.append(self.gen_teacher_subject(tmp_teacher_id, tmp_subject_id))
+
+        self.postgres_config.session.add(universities)
+        self.postgres_config.session.add_all(faculties)
+        self.postgres_config.session.add_all(departments)
+        self.postgres_config.session.add_all(majors)
+        self.postgres_config.session.add_all(students)
+        self.postgres_config.session.add_all(semesters)
+        self.postgres_config.session.add_all(subjects)
+        self.postgres_config.session.add_all(subjects_in_semester)
+        self.postgres_config.session.add_all(teachers)
+        self.postgres_config.session.add_all(scores)
+        self.postgres_config.session.add_all(teachers_subject)
+        self.postgres_config.session.add_all(subjects_major)
+        self.postgres_config.session.commit()
