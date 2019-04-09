@@ -20,3 +20,13 @@ def generate_string(size):
     This function will return a random string size of size
     """
     return ''.join([choice(ascii_letters) for n in range(size)])
+
+
+def generate_name_string(name, size):
+    return name + generate_string(size)
+
+
+def generate_person_name_string():
+    names = ["Anton", "Oleg", "Irina", "Alena", "Yulia", "Svetlana", "Dmitriy", "Amalia", "John", "Victor"]
+    surnames = ["Shultz", "Ruban", "Karno", "Kovalenko", "Simonenko", "Kern", "Bubenko", "Davidenko", "Krast", "Topol"]
+    return names[randrange(len(names))] + surnames[randrange(len(surnames))]
