@@ -78,7 +78,7 @@ create table teacher
 	teacher_name          varchar(50) not null,
 	t_department_id integer,
 	foreign key (t_department_id) references department(department_id),
-	unique (teacher_name, t_department_id)
+	unique (teacher_id, teacher_name, t_department_id)
 );
 
 create table scores

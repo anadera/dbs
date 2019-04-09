@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="94a07ee4-0a02-4a80-b03f-66b173340293" name="Default Changelist" comment="add postgres schema">
+    <list default="true" id="94a07ee4-0a02-4a80-b03f-66b173340293" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PostgresScheme.py" beforeDir="false" afterPath="$PROJECT_DIR$/PostgresScheme.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Util.py" beforeDir="false" afterPath="$PROJECT_DIR$/Util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dbs/postgres.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dbs/postgres.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_script.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_script.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/lab1_bd$main_script.coverage" NAME="main_script Coverage Results" MODIFIED="1554840666995" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/lab1_bd$main_script.coverage" NAME="main_script Coverage Results" MODIFIED="1554845834682" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lab1_bd$mongo_load.coverage" NAME="mongo_load Coverage Results" MODIFIED="1554759753630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lab1_bd$postgres_load.coverage" NAME="postgres_load Coverage Results" MODIFIED="1554761466237" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/lab1_bd$PostgresScheme.coverage" NAME="PostgresScheme Coverage Results" MODIFIED="1554839260156" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -27,8 +27,8 @@
             <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/dbs/postgres.sql">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="378">
-                    <caret line="85" column="31" lean-forward="true" selection-start-line="85" selection-start-column="31" selection-end-line="85" selection-end-column="31" />
+                  <state relative-caret-position="748">
+                    <caret line="80" column="22" selection-end-line="116" selection-end-column="2" />
                   </state>
                 </provider>
               </entry>
@@ -55,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_script.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="136">
+              <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
               <folding>
                 <element signature="e#0#4#0" expanded="true" />
               </folding>
@@ -76,24 +76,33 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PostgresScheme.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="179" selection-start-line="179" selection-end-line="179" />
+            <state relative-caret-position="340">
+              <caret line="101" column="39" lean-forward="true" selection-start-line="101" selection-start-column="39" selection-end-line="101" selection-end-column="39" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
-                <marker date="1554840557435" expanded="true" signature="438:1305" ph="..." />
+                <marker date="1554845505031" expanded="true" signature="438:1305" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/orm/session.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1936" lean-forward="true" selection-start-line="1936" selection-end-line="1936" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MongoScheme.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="884">
-              <caret line="52" column="86" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="86" />
+            <state relative-caret-position="634">
+              <caret line="63" column="23" lean-forward="true" selection-start-line="63" selection-start-column="23" selection-end-line="63" selection-end-column="23" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -114,6 +123,7 @@
     <findStrings>
       <find>id</find>
       <find>subject_in_semester</find>
+      <find>semesters</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -126,10 +136,10 @@
         <option value="$PROJECT_DIR$/postgres_load.py" />
         <option value="$PROJECT_DIR$/mongo_load.py" />
         <option value="$PROJECT_DIR$/MongoScheme.py" />
-        <option value="$PROJECT_DIR$/dbs/postgres.sql" />
-        <option value="$PROJECT_DIR$/main_script.py" />
         <option value="$PROJECT_DIR$/Util.py" />
+        <option value="$PROJECT_DIR$/main_script.py" />
         <option value="$PROJECT_DIR$/PostgresScheme.py" />
+        <option value="$PROJECT_DIR$/dbs/postgres.sql" />
       </list>
     </option>
   </component>
@@ -290,7 +300,7 @@
       <option name="presentableId" value="Default" />
       <updated>1554740054637</updated>
       <workItem from="1554740067354" duration="15975000" />
-      <workItem from="1554759609064" duration="25053000" />
+      <workItem from="1554759609064" duration="28129000" />
     </task>
     <task id="LOCAL-00001" summary="mongo to class MongoScheme&#10;starting postgres">
       <created>1554790614378</created>
@@ -320,11 +330,18 @@
       <option name="project" value="LOCAL" />
       <updated>1554834780497</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="postgress data generation (need fix)">
+      <created>1554840867249</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1554840867249</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41028000" />
+    <option name="totallyTimeSpent" value="44104000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -337,19 +354,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.21225382" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.5687974" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.22426869" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="8" sideWeight="0.49946696" visible="true" weight="0.32827735" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49946696" weight="0.32827735" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.32827735" />
@@ -395,18 +413,8 @@
     <MESSAGE value="mongo to class MongoScheme&#10;starting postgres" />
     <MESSAGE value="add postgres schema" />
     <MESSAGE value="add generators" />
-    <option name="LAST_COMMIT_MESSAGE" value="add generators" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/PostgresScheme.py</url>
-          <line>179</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="postgress data generation (need fix)" />
+    <option name="LAST_COMMIT_MESSAGE" value="postgress data generation (need fix)" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/pymongo/cursor.py">
@@ -447,23 +455,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dbs/postgres.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="85" column="31" lean-forward="true" selection-start-line="85" selection-start-column="31" selection-end-line="85" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MongoScheme.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="52" column="86" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="86" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Util.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
@@ -474,10 +465,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/orm/session.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1936" lean-forward="true" selection-start-line="1936" selection-end-line="1936" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main_script.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="136">
+          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
           <folding>
             <element signature="e#0#4#0" expanded="true" />
           </folding>
@@ -486,11 +484,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PostgresScheme.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="179" selection-start-line="179" selection-end-line="179" />
+        <state relative-caret-position="340">
+          <caret line="101" column="39" lean-forward="true" selection-start-line="101" selection-start-column="39" selection-end-line="101" selection-end-column="39" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
-            <marker date="1554840557435" expanded="true" signature="438:1305" ph="..." />
+            <marker date="1554845505031" expanded="true" signature="438:1305" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbs/postgres.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="748">
+          <caret line="80" column="22" selection-end-line="116" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MongoScheme.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="634">
+          <caret line="63" column="23" lean-forward="true" selection-start-line="63" selection-start-column="23" selection-end-line="63" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
