@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="94a07ee4-0a02-4a80-b03f-66b173340293" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/MySqlScheme.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Util.py" beforeDir="false" afterPath="$PROJECT_DIR$/Util.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_script.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_script.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,7 +32,7 @@
         <entry file="file://$PROJECT_DIR$/main_script.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="238">
-              <caret line="14" column="29" lean-forward="true" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+              <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -54,7 +52,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Configuration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
+            <state relative-caret-position="340">
               <caret line="24" selection-start-line="24" selection-end-line="24" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -122,8 +120,8 @@
         <option value="$PROJECT_DIR$/PostgresScheme.py" />
         <option value="$PROJECT_DIR$/dbs/postgres.sql" />
         <option value="$PROJECT_DIR$/MySqlScheme.py" />
-        <option value="$PROJECT_DIR$/main_script.py" />
         <option value="$PROJECT_DIR$/Util.py" />
+        <option value="$PROJECT_DIR$/main_script.py" />
       </list>
     </option>
   </component>
@@ -138,7 +136,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -155,6 +152,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -286,7 +284,8 @@
       <workItem from="1554740067354" duration="15975000" />
       <workItem from="1554759609064" duration="28569000" />
       <workItem from="1554923319995" duration="572000" />
-      <workItem from="1554928817757" duration="1810000" />
+      <workItem from="1554928817757" duration="1847000" />
+      <workItem from="1555096790005" duration="603000" />
     </task>
     <task id="LOCAL-00001" summary="mongo to class MongoScheme&#10;starting postgres">
       <created>1554790614378</created>
@@ -330,11 +329,18 @@
       <option name="project" value="LOCAL" />
       <updated>1554845910954</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="add mysql">
+      <created>1554930847557</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1554930847558</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46926000" />
+    <option name="totallyTimeSpent" value="47566000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -347,8 +353,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12526652" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12633263" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -421,7 +428,8 @@
     <MESSAGE value="add generators" />
     <MESSAGE value="postgress data generation (need fix)" />
     <MESSAGE value="postgress data generation works&#10;schema has duplicates" />
-    <option name="LAST_COMMIT_MESSAGE" value="postgress data generation works&#10;schema has duplicates" />
+    <MESSAGE value="add mysql" />
+    <option name="LAST_COMMIT_MESSAGE" value="add mysql" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/pymongo/cursor.py">
@@ -459,6 +467,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dbs/postgres.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="707">
+          <caret line="80" column="22" selection-end-line="116" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MySqlScheme.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Configuration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/PostgresScheme.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1615">
@@ -480,41 +519,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dbs/postgres.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="707">
-          <caret line="80" column="22" selection-end-line="116" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Configuration.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MySqlScheme.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main_script.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
-          <caret line="14" column="29" lean-forward="true" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+          <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
