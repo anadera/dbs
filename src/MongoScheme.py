@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from Util import random_date
+from src.Util import random_date
 from random import randrange
 from datetime import datetime
 from bson.objectid import ObjectId

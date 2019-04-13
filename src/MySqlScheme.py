@@ -1,7 +1,7 @@
 import random
 
-from Configuration import Configuration
-from Util import generate_string, generateRandomDate
+from src.Configuration import Configuration
+from src.Util import generate_string, generateRandomDate
 
 
 class MySqlScheme:

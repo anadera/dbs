@@ -1,8 +1,8 @@
-from Configuration import Configuration
-from Util import generate_name_string
-from Util import generate_person_name_string
-from Util import random_date
-from Util import postgres_date
+from src.Configuration import Configuration
+from src.Util import generate_name_string
+from src.Util import generate_person_name_string
+from src.Util import random_date
+from src.Util import postgres_date
 from random import randrange
 from datetime import datetime
 
@@ -25,18 +25,18 @@ class PostgresScheme:
         self.id = 1
 
     def clear(self):
-        self.postgres_config.session.query(self.University_postgres).delete()
-        self.postgres_config.session.query(self.Faculty_postgres).delete()
-        self.postgres_config.session.query(self.Department_postgres).delete()
+        self.postgres_config.session.query(self.Scores_postgres).delete()
+        self.postgres_config.session.query(self.Teacher_subject_postgres).delete()
+        self.postgres_config.session.query(self.Teacher_postgres).delete()
+        self.postgres_config.session.query(self.Subject_major_postgres).delete()
+        self.postgres_config.session.query(self.Subject_in_semester_postgres).delete()
+        self.postgres_config.session.query(self.Semester_postgres).delete()
+        self.postgres_config.session.query(self.Subject_postgres).delete()
         self.postgres_config.session.query(self.Student_postgres).delete()
         self.postgres_config.session.query(self.Major_postgres).delete()
-        self.postgres_config.session.query(self.Subject_postgres).delete()
-        self.postgres_config.session.query(self.Semester_postgres).delete()
-        self.postgres_config.session.query(self.Subject_in_semester_postgres).delete()
-        self.postgres_config.session.query(self.Subject_major_postgres).delete()
-        self.postgres_config.session.query(self.Teacher_postgres).delete()
-        self.postgres_config.session.query(self.Teacher_subject_postgres).delete()
-        self.postgres_config.session.query(self.Scores_postgres).delete()
+        self.postgres_config.session.query(self.Department_postgres).delete()
+        self.postgres_config.session.query(self.Faculty_postgres).delete()
+        self.postgres_config.session.query(self.University_postgres).delete()
 
     def gen_university(self):
         st = ["standart", "original"]
