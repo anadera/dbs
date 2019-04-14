@@ -9,36 +9,47 @@ create table university
 create table faculty
 (
 	faculty_id    integer primary key,
-	f_university_id integer,
 	faculty_name          varchar(50) not null,
+	f_university_id integer,
 	foreign key (f_university_id) references university (university_id),
 	unique (faculty_name, f_university_id)
 );
 
-create table department
+create table subdivision
 (
-	department_id         integer primary key,
-	department_name       varchar(50) not null,
+	subdivision_id         integer primary key,
+	subdivision_name       varchar(50) not null,
 	d_faculty_id integer,
 	foreign key (d_faculty_id) references faculty(faculty_id),
-	unique (department_name, d_faculty_id)
+	unique (subdivision_name, d_faculty_id)
 );
 
-create table major
+create table specialization
 (
-	major_id            integer primary key,
-	major_type    varchar(10),
-	m_department_id integer,
-	foreign key (m_department_id) references department(department_id),
-	unique (major_type, m_department_id)
+	specialization_id            integer primary key,
+	specialization_name    varchar(10)	,
+	unique (specialization_id)
+);
+
+create table student_group
+(
+  group_id integer primary key,
+  group_name varchar(10),
+  year date,
+  group_subdivision integer,
+  group_specialization integer,
+  course_number integer,
+  foreign key(group_subdivision) references subdivision(subdivision_id),
+  foreign key (group_specialization) references specialization(specialization_id),
+  unique (group_id, group_name, year)
 );
 
 create table student
 (
 	student_id       integer primary key,
+	group_id integer,
 	student_name     varchar(50) not null,
-	stu_major_id integer,
-	foreign key (stu_major_id) references major(major_id),
+	foreign key (group_id) references student_group(group_id),
 	unique (student_id, student_name)
 );
 
@@ -46,72 +57,53 @@ create table semester
 (
 	semester_id       integer primary key,
 	semester_num      integer not null,
-	sem_major_id integer,
-	foreign key (sem_major_id) references major(major_id),
-	unique (semester_num, sem_major_id)
+	sem_specialization_id integer,
+	foreign key (sem_specialization_id) references specialization(specialization_id),
+	unique (semester_id, semester_num, sem_specialization_id)
 );
 
 create table subject
 (
-	subject_id       integer primary key,
-	subject_name     varchar(50) not null,
-	unique (subject_name)
+  subject_id integer primary key,
+	subject_name     varchar(50)
 );
 
-create table subject_in_semester
+create table employee
 (
-	sis_id integer primary key,
+	employee_id            integer primary key,
+	employee_name          varchar(50) not null,
+	t_subdivision_id integer,
+	foreign key (t_subdivision_id) references subdivision(subdivision_id),
+	unique (employee_id, employee_name, t_subdivision_id)
+);
+
+create table specialization_program
+(
+	sp_id integer primary key,
+	year date,
 	lectures     integer,
 	practises    integer,
 	labs         integer,
 	control_type varchar(10),
-	sis_subject_id integer,
-	sis_semester_id integer,
-	foreign key (sis_subject_id) references subject(subject_id),
-	foreign key (sis_semester_id) references semester(semester_id),
-	unique (sis_subject_id, sis_semester_id)
+	sp_subject_id integer,
+	sp_semester_id integer,
+	main_teacher integer,
+	foreign key (sp_subject_id) references subject(subject_id),
+	foreign key (sp_semester_id) references semester(semester_id),
+	foreign key (main_teacher) references employee(employee_id),
+	unique (sp_id,year, control_type, sp_subject_id, sp_semester_id)
 );
 
-create table teacher
+create table results
 (
-	teacher_id            integer primary key,
-	teacher_name          varchar(50) not null,
-	t_department_id integer,
-	foreign key (t_department_id) references department(department_id),
-	unique (teacher_id, teacher_name, t_department_id)
-);
-
-create table scores
-(
-	score_id integer primary key,
-	score       integer,
-	scoreDate   date,
-	sc_teacher_id  integer,
+	result_id integer primary key,
 	sc_subject_id integer,
+	mark      integer,
 	sc_student_id integer,
-	sc_semester_id integer,
-	foreign key (sc_teacher_id) references teacher (teacher_id),
+	sc_teacher_id  integer,
+	resultDate   date,
+	foreign key (sc_teacher_id) references employee (employee_id),
 	foreign key (sc_subject_id) references subject (subject_id),
 	foreign key (sc_student_id) references student (student_id),
-	foreign key (sc_semester_id) references semester (semester_id)  
-);
-
-create table teacher_subject
-(
-	t_sub_id integer primary key,
-	t_sub_teacher_id integer,
-	t_sub_subject_id integer,
-	foreign key (t_sub_teacher_id) references teacher(teacher_id),
-	foreign key (t_sub_subject_id) references subject(subject_id),
-	unique (t_sub_teacher_id, t_sub_subject_id)
-);
-
-create table subject_major
-(
-	sub_m_id integer primary key,
-	sub_m_subject_id integer,
-	sub_m_major_id integer,
-	foreign key (sub_m_subject_id) references subject(subject_id),
-	foreign key (sub_m_major_id) references major(major_id),
-	unique (sub_m_subject_id, sub_m_major_id)
+	unique (sc_subject_id,mark,sc_student_id,sc_teacher_id,resultDate)
 );

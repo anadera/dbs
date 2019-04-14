@@ -2,7 +2,7 @@ from src.Configuration import Configuration
 from src.Util import generate_name_string
 from src.Util import generate_person_name_string
 from src.Util import random_date
-from src.Util import postgres_date
+from src.Util import postgres_date, year
 from random import randrange
 from datetime import datetime
 
@@ -12,183 +12,247 @@ class PostgresScheme:
         self.postgres_config = Configuration(url, "_postgres")
         self.University_postgres = self.postgres_config.Base.classes.university
         self.Faculty_postgres = self.postgres_config.Base.classes.faculty
-        self.Department_postgres = self.postgres_config.Base.classes.department
-        self.Major_postgres = self.postgres_config.Base.classes.major
+        self.Subdivision_postgres = self.postgres_config.Base.classes.subdivision
+        self.Specialization_postgres = self.postgres_config.Base.classes.specialization
+        self.Student_group_postgres = self.postgres_config.Base.classes.student_group
         self.Student_postgres = self.postgres_config.Base.classes.student
         self.Semester_postgres = self.postgres_config.Base.classes.semester
         self.Subject_postgres = self.postgres_config.Base.classes.subject
-        self.Subject_in_semester_postgres = self.postgres_config.Base.classes.subject_in_semester
-        self.Teacher_postgres = self.postgres_config.Base.classes.teacher
-        self.Teacher_subject_postgres = self.postgres_config.Base.classes.teacher_subject
-        self.Subject_major_postgres = self.postgres_config.Base.classes.subject_major
-        self.Scores_postgres = self.postgres_config.Base.classes.scores
+        self.Employee_postgres = self.postgres_config.Base.classes.employee
+        self.Specialization_program_postgres = self.postgres_config.Base.classes.specialization_program
+        self.Results_postgres = self.postgres_config.Base.classes.results
         self.id = 1
 
     def clear(self):
-        self.postgres_config.session.query(self.Scores_postgres).delete()
-        self.postgres_config.session.query(self.Teacher_subject_postgres).delete()
-        self.postgres_config.session.query(self.Teacher_postgres).delete()
-        self.postgres_config.session.query(self.Subject_major_postgres).delete()
-        self.postgres_config.session.query(self.Subject_in_semester_postgres).delete()
-        self.postgres_config.session.query(self.Semester_postgres).delete()
+        self.postgres_config.session.query(self.Results_postgres).delete()
+        self.postgres_config.session.query(self.Specialization_program_postgres).delete()
+        self.postgres_config.session.query(self.Employee_postgres).delete()
         self.postgres_config.session.query(self.Subject_postgres).delete()
+        self.postgres_config.session.query(self.Semester_postgres).delete()
         self.postgres_config.session.query(self.Student_postgres).delete()
-        self.postgres_config.session.query(self.Major_postgres).delete()
-        self.postgres_config.session.query(self.Department_postgres).delete()
+        self.postgres_config.session.query(self.Student_group_postgres).delete()
+        self.postgres_config.session.query(self.Specialization_postgres).delete()
+        self.postgres_config.session.query(self.Subdivision_postgres).delete()
         self.postgres_config.session.query(self.Faculty_postgres).delete()
         self.postgres_config.session.query(self.University_postgres).delete()
 
     def gen_university(self):
         st = ["standart", "original"]
         university = self.University_postgres(university_id=self.id,
-                                               university_name=generate_name_string("ITMO",2),
-                                               university_standart_type=st[randrange(len(st))])
+                                              university_name=generate_name_string("ITMO", 2),
+                                              university_standart_type=st[randrange(len(st))])
         self.id = self.id + 1
         return university
 
     def gen_faculty(self, f_university_id):
         faculty = self.Faculty_postgres(faculty_id=self.id,
-                                         faculty_name=generate_name_string("Faculty ", 12),
-                                         f_university_id=f_university_id)
+                                        faculty_name=generate_name_string("Faculty ", 12),
+                                        f_university_id=f_university_id)
         self.id = self.id + 1
         return faculty
 
-    def gen_department(self, d_faculty_id):
-        department = self.Department_postgres(department_id=self.id,
-                                               department_name=generate_name_string("Department ", 12),
-                                               d_faculty_id=d_faculty_id)
+    def gen_subdivision(self, d_faculty_id):
+        subdivision = self.Subdivision_postgres(subdivision_id=self.id,
+                                                subdivision_name=generate_name_string("subdivision ", 12),
+                                                d_faculty_id=d_faculty_id)
         self.id = self.id + 1
-        return department
+        return subdivision
 
-    def gen_major(self, m_department_id):
-        major = self.Major_postgres(major_id=self.id,
-                                     major_type=generate_name_string("type ", 5),
-                                     m_department_id=m_department_id)
+    def gen_specialization(self):
+        specialization = self.Specialization_postgres(specialization_id=self.id,
+                                                      specialization_name=generate_name_string("spec ", 5),
+                                                      )
         self.id = self.id + 1
-        return major
+        return specialization
 
-    def gen_student(self, stu_major_id):
+    def gen_student_group(self, gr_subdivision, gr_specialization):
+        group = self.Student_group_postgres(group_id=self.id,
+                                            group_name=generate_name_string("14", 3),
+                                            year=postgres_date(
+                                                random_date(
+                                                    datetime.strptime('01/01/1980 01:00 AM', '%m/%d/%Y %I:%M %p'),
+                                                    datetime.strptime('01/01/2019 01:00 AM', '%m/%d/%Y %I:%M %p'))),
+                                            group_subdivision=gr_subdivision,
+                                            group_specialization=gr_specialization,
+                                            course_number=randrange(4))
+        self.id = self.id + 1
+        return group
+
+    def gen_student(self, stu_group_id):
         student = self.Student_postgres(student_id=self.id,
-                                         student_name=generate_person_name_string(),
-                                         stu_major_id=stu_major_id)
+                                        student_name=generate_person_name_string(),
+                                        group_id=stu_group_id)
         self.id = self.id + 1
         return student
 
-    def gen_semester(self, sem_major_id):
+    def gen_semester(self, sem_specialization_id):
         semester = self.Semester_postgres(semester_id=self.id,
-                                           semester_num=randrange(1, 8),
-                                           sem_major_id=sem_major_id)
+                                          semester_num=randrange(1, 8),
+                                          sem_specialization_id=sem_specialization_id)
         self.id = self.id + 1
         return semester
 
     def gen_subject(self):
         subject = self.Subject_postgres(subject_id=self.id,
-                                         subject_name=generate_name_string("Foundations of ", 10))
-        self.id = self.id + 1
+                                        subject_name=generate_name_string("Foundations of ", 10))
+        self.id = self.id +1
         return subject
 
-    def gen_subject_in_semester(self, sis_subject_id, sis_semester_id):
+    def gen_employee(self, t_subdivision_id):
+        employee = self.Employee_postgres(employee_id=self.id,
+                                          employee_name=generate_person_name_string(),
+                                          t_subdivision_id=t_subdivision_id)
+        self.id = self.id + 1
+        return employee
+
+    def gen_specialization_program(self, program_subject_id, program_semester_id, program_teacher):
         ctype = ["exam", "credit"]
-        subject_in_semester = self.Subject_in_semester_postgres(sis_id=self.id,
-                                                                 lectures=randrange(0, 20),
-                                                                 practises=randrange(0, 40),
-                                                                 labs=randrange(0, 20),
-                                                                 control_type=ctype[randrange(len(ctype))],
-                                                                 sis_subject_id=sis_subject_id,
-                                                                 sis_semester_id=sis_semester_id)
+        program = self.Specialization_program_postgres(sp_id=self.id,
+                                                       year=postgres_date(
+                                                           random_date(
+                                                               datetime.strptime('01/01/1980 01:00 AM',
+                                                                                 '%m/%d/%Y %I:%M %p'),
+                                                               datetime.strptime('01/01/2019 01:00 AM',
+                                                                                 '%m/%d/%Y %I:%M %p'))),
+                                                       lectures=randrange(0, 20),
+                                                       practises=randrange(0, 40),
+                                                       labs=randrange(0, 20),
+                                                       control_type=ctype[randrange(len(ctype))],
+                                                       sp_subject_id=program_subject_id,
+                                                       sp_semester_id=program_semester_id,
+                                                       main_teacher=program_teacher)
         self.id = self.id + 1
-        return subject_in_semester
+        return program
 
-    def gen_teacher(self, t_department_id):
-        teacher = self.Teacher_postgres(teacher_id=self.id,
-                                         teacher_name=generate_person_name_string(),
-                                         t_department_id=t_department_id)
+    def gen_results(self, sc_teacher_id, sc_subject_id, sc_student_id, sc_semester_id):
+        result = self.Results_postgres(result_id=self.id,
+                                       sc_subject_id=sc_subject_id,
+                                       mark=randrange(100),
+                                       sc_student_id=sc_student_id,
+                                       sc_teacher_id=sc_teacher_id,
+                                       resultdate=postgres_date(random_date(
+                                           datetime.strptime('01/01/2014 01:00 AM', '%m/%d/%Y %I:%M %p'),
+                                           datetime.strptime('01/01/2019 01:00 AM', '%m/%d/%Y %I:%M %p'))))
         self.id = self.id + 1
-        return teacher
-
-    def gen_scores(self, sc_teacher_id, sc_subject_id, sc_student_id, sc_semester_id):
-        score = self.Scores_postgres(score_id=self.id,
-                                      score=randrange(100),
-                                      scoredate=postgres_date(random_date(
-                                          datetime.strptime('01/01/2014 01:00 AM', '%m/%d/%Y %I:%M %p'),
-                                          datetime.strptime('01/01/2019 01:00 AM', '%m/%d/%Y %I:%M %p'))),
-                                      sc_teacher_id=sc_teacher_id,
-                                      sc_subject_id=sc_subject_id,
-                                      sc_student_id=sc_student_id,
-                                      sc_semester_id=sc_semester_id)
-        self.id = self.id + 1
-        return score
-
-    def gen_teacher_subject(self, t_sub_teacher_id, t_sub_subject_id):
-        teacher_subject = self.Teacher_subject_postgres(t_sub_id=self.id,
-                                                         t_sub_teacher_id=t_sub_teacher_id,
-                                                         t_sub_subject_id=t_sub_subject_id)
-        self.id = self.id + 1
-        return teacher_subject
-
-    def gen_subject_major(self, sub_m_subject_id, sub_m_major_id):
-        subject_major = self.Subject_major_postgres(sub_m_id=self.id,
-                                                     sub_m_subject_id=sub_m_subject_id,
-                                                     sub_m_major_id=sub_m_major_id)
-        self.id = self.id + 1
-        return subject_major
+        return result
 
     def generate_data(self):
         universities = []
         faculties = []
-        departments = []
-        majors = []
+        subdivisions = []
+        specializations = []
+        student_groups = []
         students = []
         semesters = []
         subjects = []
-        subjects_in_semester = []
-        teachers = []
-        scores = []
-        teachers_subject = []
-        subjects_major = []
-        for u_r in range(2):
-            tmp_university_id = self.id
-            universities.append(self.gen_university())
-            for f_r in range(10):
-                tmp_faculty_id = self.id
-                faculties.append(self.gen_faculty(tmp_university_id))
-                for d_r in range(4):
-                    tmp_deprtment_id = self.id
-                    departments.append(self.gen_department(tmp_faculty_id))
-                    for m_r in range(5):
-                        tmp_major_id = self.id
-                        majors.append(self.gen_major(tmp_deprtment_id))
-                        for stu_r in range(5):
-                            tmp_student_id = self.id
-                            students.append(self.gen_student(tmp_major_id))
-                        for sem_r in range(8):
-                            tmp_semester_id = self.id
-                            semesters.append(self.gen_semester(tmp_major_id))
-                        for sub_r in range(5):
-                            tmp_subject_id = self.id
-                            subjects.append(self.gen_subject())
-                            subjects_major.append(self.gen_subject_major(tmp_subject_id, tmp_major_id))
-                        for sis_r in range(8):
-                            tmp_sis_id = self.id
-                            subjects_in_semester.append(self.gen_subject_in_semester(tmp_subject_id, tmp_semester_id))
-                    for t_r in range(10):
-                        tmp_teacher_id = self.id
-                        teachers.append(self.gen_teacher(tmp_deprtment_id))
-                        for sc_r in range(2):
-                            scores.append(
-                                self.gen_scores(tmp_teacher_id, tmp_subject_id, tmp_student_id, tmp_semester_id))
-                        teachers_subject.append(self.gen_teacher_subject(tmp_teacher_id, tmp_subject_id))
-
+        employees = []
+        specialization_programs = []
+        results = []
+        tmp_university_id = self.id
+        universities.append(self.gen_university())
+        for f_r in range(10):
+            tmp_faculty_id = self.id
+            faculties.append(self.gen_faculty(tmp_university_id))
+            for d_r in range(4):
+                tmp_subdivision_id = self.id
+                subdivisions.append(self.gen_subdivision(tmp_faculty_id))
+                for emp_r in range(5):
+                    tmp_employee_id = self.id
+                    employees.append(self.gen_employee(tmp_subdivision_id))
+        for spec_r in range(10):
+            tmp_specialization_id = self.id
+            specializations.append(self.gen_specialization())
+            for gr_r in range(4):
+                tmp_group_id = self.id
+                student_groups.append(self.gen_student_group(tmp_subdivision_id,tmp_specialization_id))
+                for stu_r in range(10):
+                    tmp_student_id = self.id
+                    students.append(self.gen_student(tmp_group_id))
+            for sem_r in range(8):
+                tmp_sem_id = self.id
+                semesters.append(self.gen_semester(tmp_specialization_id))
+                for sub_r in range(10):
+                    tmp_sub_id = self.id
+                    subjects.append(self.gen_subject())
+                    for sp_r in range(5):
+                        tmp_sp_id = self.id
+                        specialization_programs.append(self.gen_specialization_program(tmp_sub_id,tmp_sem_id,tmp_employee_id))
+                    for res_r in range(10):
+                        results.append(self.gen_results(tmp_employee_id,tmp_sub_id,tmp_student_id,tmp_sem_id))
         self.postgres_config.session.add_all(universities)
         self.postgres_config.session.add_all(faculties)
-        self.postgres_config.session.add_all(departments)
-        self.postgres_config.session.add_all(majors)
+        self.postgres_config.session.add_all(subdivisions)
+        self.postgres_config.session.add_all(specializations)
+        self.postgres_config.session.add_all(student_groups)
         self.postgres_config.session.add_all(students)
         self.postgres_config.session.add_all(semesters)
+        #print(subjects)
         self.postgres_config.session.add_all(subjects)
-        self.postgres_config.session.add_all(subjects_in_semester)
-        self.postgres_config.session.add_all(teachers)
-        self.postgres_config.session.add_all(scores)
-        self.postgres_config.session.add_all(teachers_subject)
-        self.postgres_config.session.add_all(subjects_major)
+        self.postgres_config.session.add_all(specialization_programs)
+        self.postgres_config.session.add_all(employees)
+        self.postgres_config.session.add_all(results)
         self.postgres_config.session.commit()
+
+
+
+    # def generate_data(self):
+    #     universities = []
+    #     faculties = []
+    #     subdivisions = []
+    #     specializations = []
+    #     students = []
+    #     semesters = []
+    #     subjects = []
+    #     subjects_in_semester = []
+    #     employees = []
+    #     results = []
+    #     employees_subject = []
+    #     subjects_specialization = []
+    #     for u_r in range(2):
+    #         tmp_university_id = self.id
+    #         universities.append(self.gen_university())
+    #         for f_r in range(10):
+    #             tmp_faculty_id = self.id
+    #             faculties.append(self.gen_faculty(tmp_university_id))
+    #             for d_r in range(4):
+    #                 tmp_deprtment_id = self.id
+    #                 subdivisions.append(self.gen_subdivision(tmp_faculty_id))
+    #                 for m_r in range(5):
+    #                     tmp_specialization_id = self.id
+    #                     specializations.append(self.gen_specialization(tmp_deprtment_id))
+    #                     for stu_r in range(5):
+    #                         tmp_student_id = self.id
+    #                         students.append(self.gen_student(tmp_specialization_id))
+    #                     for sem_r in range(8):
+    #                         tmp_semester_id = self.id
+    #                         semesters.append(self.gen_semester(tmp_specialization_id))
+    #                     for sub_r in range(5):
+    #                         tmp_subject_id = self.id
+    #                         subjects.append(self.gen_subject())
+    #                         subjects_specialization.append(
+    #                             self.gen_subject_specialization(tmp_subject_id, tmp_specialization_id))
+    #                     for program_r in range(8):
+    #                         tmp_program_id = self.id
+    #                         subjects_in_semester.append(
+    #                             self.gen_specialization_program(tmp_subject_id, tmp_semester_id))
+    #                 for t_r in range(10):
+    #                     tmp_employee_id = self.id
+    #                     employees.append(self.gen_employee(tmp_deprtment_id))
+    #                     for sc_r in range(2):
+    #                         results.append(
+    #                             self.gen_results(tmp_employee_id, tmp_subject_id, tmp_student_id, tmp_semester_id))
+    #                     employees_subject.append(self.gen_employee_subject(tmp_employee_id, tmp_subject_id))
+    #
+    #     self.postgres_config.session.add_all(universities)
+    #     self.postgres_config.session.add_all(faculties)
+    #     self.postgres_config.session.add_all(subdivisions)
+    #     self.postgres_config.session.add_all(specializations)
+    #     self.postgres_config.session.add_all(students)
+    #     self.postgres_config.session.add_all(semesters)
+    #     self.postgres_config.session.add_all(subjects)
+    #     self.postgres_config.session.add_all(subjects_in_semester)
+    #     self.postgres_config.session.add_all(employees)
+    #     self.postgres_config.session.add_all(results)
+    #     self.postgres_config.session.add_all(employees_subject)
+    #     self.postgres_config.session.add_all(subjects_specialization)
+    #     self.postgres_config.session.commit()

@@ -20,6 +20,10 @@ def postgres_date(d):
     return d.strftime("%Y-%m-%d")
 
 
+def year(d):
+    return d.strftime("%Y")
+
+
 def generate_string(size):
     """
     This function will return a random string size of size
@@ -43,4 +47,4 @@ def generateRandomDate():
     return start + timedelta(
         # Get a random amount of seconds between `start` and `end`
         seconds=randint(0, int((end - start).total_seconds()))
-)
+    )
