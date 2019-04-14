@@ -65,7 +65,8 @@ create table semester
 create table subject
 (
   subject_id integer primary key,
-	subject_name     varchar(50)
+	subject_name     varchar(50),
+	unique (subject_name)
 );
 
 create table employee
@@ -85,25 +86,25 @@ create table specialization_program
 	practises    integer,
 	labs         integer,
 	control_type varchar(10),
-	sp_subject_id integer,
+	sp_subject_name varchar(50),
 	sp_semester_id integer,
 	main_teacher integer,
-	foreign key (sp_subject_id) references subject(subject_id),
+	foreign key (sp_subject_name) references subject(subject_name),
 	foreign key (sp_semester_id) references semester(semester_id),
 	foreign key (main_teacher) references employee(employee_id),
-	unique (sp_id,year, control_type, sp_subject_id, sp_semester_id)
+	unique (sp_id,year, control_type, sp_subject_name, sp_semester_id)
 );
 
 create table results
 (
 	result_id integer primary key,
-	sc_subject_id integer,
+	sc_subject_name varchar(50),
 	mark      integer,
 	sc_student_id integer,
 	sc_teacher_id  integer,
 	resultDate   date,
 	foreign key (sc_teacher_id) references employee (employee_id),
-	foreign key (sc_subject_id) references subject (subject_id),
+	foreign key (sc_subject_name) references subject (subject_name),
 	foreign key (sc_student_id) references student (student_id),
-	unique (result_id, sc_subject_id,mark,sc_student_id,sc_teacher_id,resultDate)
+	unique (result_id, sc_subject_name,mark,sc_student_id,sc_teacher_id,resultDate)
 );

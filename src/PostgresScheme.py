@@ -2,7 +2,7 @@ from src.Configuration import Configuration
 from src.Util import generate_name_string
 from src.Util import generate_person_name_string
 from src.Util import random_date
-from src.Util import postgres_date, year
+from src.Util import postgres_date
 from random import randrange
 from datetime import datetime
 
@@ -118,7 +118,7 @@ class PostgresScheme:
                                                        practises=randrange(0, 40),
                                                        labs=randrange(0, 20),
                                                        control_type=ctype[randrange(len(ctype))],
-                                                       sp_subject_id=program_subject_id,
+                                                       sp_subject_name=program_subject_id,
                                                        sp_semester_id=program_semester_id,
                                                        main_teacher=program_teacher)
         self.id = self.id + 1
@@ -126,7 +126,7 @@ class PostgresScheme:
 
     def gen_results(self, sc_teacher_id, sc_subject_id, sc_student_id, sc_semester_id):
         result = self.Results_postgres(result_id=self.id,
-                                       sc_subject_id=sc_subject_id,
+                                       sc_subject_name=sc_subject_id,
                                        mark=randrange(100),
                                        sc_student_id=sc_student_id,
                                        sc_teacher_id=sc_teacher_id,
@@ -172,8 +172,8 @@ class PostgresScheme:
                 tmp_sem_id = self.id
                 semesters.append(self.gen_semester(tmp_specialization_id))
                 for sub_r in range(10):
-                    tmp_sub_id = self.id
                     subjects.append(self.gen_subject())
+                    tmp_sub_id=subjects[-1].subject_name
                     for sp_r in range(5):
                         tmp_sp_id = self.id
                         specialization_programs.append(self.gen_specialization_program(tmp_sub_id,tmp_sem_id,tmp_employee_id))

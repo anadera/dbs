@@ -20,7 +20,7 @@ def postgres_date(d):
     return d.strftime("%Y-%m-%d")
 
 
-def year(d):
+def toyear(d):
     return d.strftime("%Y")
 
 

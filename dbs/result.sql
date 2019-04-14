@@ -248,8 +248,8 @@ CREATE TABLE Visit (
 
 CREATE TABLE Year (
   year_name      number(10),
-  startDate date NOT NULL,
-  endDate   date NOT NULL,
+  startDate date,
+  endDate   date,
   PRIMARY KEY (year_name));
 
 

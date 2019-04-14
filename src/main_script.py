@@ -3,6 +3,8 @@ from src.PostgresScheme import PostgresScheme
 from src.MySqlScheme import MySqlScheme
 from src.OracleScheme import OracleScheme
 from src.ResultScheme import ResultScheme
+from src.Util import toyear, postgres_date
+from datetime import datetime
 
 
 def generateConferecneParticipants(person):
@@ -100,20 +102,20 @@ def generatePulicationInfo(publisher):
 
 
 mongo = MongoScheme('lab1_mongodb')
-# mongo.drop_db()
-# mongo.create_gen_db()
+#mongo.drop_db()
+#mongo.create_gen_db()
 
 postgres = PostgresScheme('postgresql://postgres:postgres@localhost:5432/postgresdb')
-# postgres.clear()
-# postgres.generate_data()
+#postgres.clear()
+#postgres.generate_data()
 
 mysql = MySqlScheme('mysql://root:root@localhost/sys')
-# mysql.clear()
-# mysql.generate_data(100, 100)
+#mysql.clear()
+#mysql.generate_data(100, 100)
 
 oracle = OracleScheme("oracle+cx_oracle://myschema:1234@localhost/orcl")
-# oracle.clear()
-# oracle.generate_data(100, 100)
+#oracle.clear()
+#oracle.generate_data(100, 100)
 
 result = ResultScheme('oracle+cx_oracle://newschema:1234@localhost/orcl')
 result.clear()
@@ -131,6 +133,20 @@ conferences_mysql = mysql.my_sql_config.session.query(mysql.Conference_mysql).al
 conference_info_mysql = mysql.my_sql_config.session.query(mysql.Conference_info_mysql)
 projects_mysql = mysql.my_sql_config.session.query(mysql.Scientific_project_mysql).all()
 publishers_mysql = mysql.my_sql_config.session.query(mysql.Publisher_mysql).all()
+
+universities_postgres = postgres.postgres_config.session.query(postgres.University_postgres).all()
+faculties_postgres = postgres.postgres_config.session.query(postgres.Faculty_postgres).all()
+subdivisions_postgress = postgres.postgres_config.session.query(postgres.Subdivision_postgres).all()
+specialization_postgress = postgres.postgres_config.session.query(postgres.Specialization_postgres).all()
+student_group_postgress = postgres.postgres_config.session.query(postgres.Student_group_postgres).all()
+student_postgress = postgres.postgres_config.session.query(postgres.Student_postgres).all()
+
+semester_postgress = postgres.postgres_config.session.query(postgres.Semester_postgres).all()
+subject_postgress = postgres.postgres_config.session.query(postgres.Subject_postgres).all()
+employee_postgress = postgres.postgres_config.session.query(postgres.Employee_postgres).all()
+specialization_program_postgress = postgres.postgres_config.session.query(
+    postgres.Specialization_program_postgres).all()
+results_postgress = postgres.postgres_config.session.query(postgres.Results_postgres).all()
 
 result_people = {}
 
@@ -281,22 +297,158 @@ for t in mongo.tenants.find():
         result.result_config.session.add(result_people[t["id"]])
         result.result_config.session.commit()
     result.result_config.session.add(
-            result.Teenant_result(id=t["id"],
-                                  person_id=t["person_id"],
-                                  room_num=t["room_num"],
-                                  start_date=t["startDate"],
-                                  end_date=t["endDate"]))
+        result.Teenant_result(id=t["id"],
+                              person_id=t["person_id"],
+                              room_num=t["room_num"],
+                              start_date=t["startDate"],
+                              end_date=t["endDate"]))
     result.result_config.session.add(
-            result.Visit_result(id=t["id"],
-                                teenant_id=t["id"],
-                                start_date=t["visit"]["startDate"],
-                                end_date=t["visit"]["endDate"]))
+        result.Visit_result(id=t["id"],
+                            teenant_id=t["id"],
+                            start_date=t["visit"]["startDate"],
+                            end_date=t["visit"]["endDate"]))
     result.result_config.session.add(
-            result.Payment_result(id=t["id"],
-                                  teenant_id=t["id"],
-                                  date_of_transaction=t["payment"]["date_of_transaction"],
-                                  sum=t["payment"]["sum"]))
+        result.Payment_result(id=t["id"],
+                              teenant_id=t["id"],
+                              date_of_transaction=t["payment"]["date_of_transaction"],
+                              sum=t["payment"]["sum"]))
     result.result_config.session.commit()
+
+for university in universities_postgres:
+    result.result_config.session.add(
+        result.University_result(id=university.university_id,
+                                 name=university.university_name,
+                                 standart_type=university.university_standart_type))
+    result.result_config.session.commit()
+
+for faculty in faculties_postgres:
+    result.result_config.session.add(
+        result.Faculty_result(id=faculty.faculty_id,
+                              name=faculty.faculty_name,
+                              university_id=faculty.f_university_id,
+                              type=None))
+    result.result_config.session.commit()
+
+for subdivision in subdivisions_postgress:
+    result.result_config.session.add(
+        result.Subdivision_result(
+            name=subdivision.subdivision_name,
+            faculty_id=subdivision.d_faculty_id))
+    result.result_config.session.commit()
+
+for specialization in specialization_postgress:
+    result.result_config.session.add(
+        result.Specialization_result(
+            id=specialization.specialization_id,
+            name=specialization.specialization_name,
+            code=None,
+            program_id=None))
+    result.result_config.session.commit()
+
+for student_group in student_group_postgress:
+    if toyear(student_group.year) not in years_oracle:
+        result.result_config.session.add(
+            result.Year_result(year_name=toyear(student_group.year), startdate=datetime(2018, 9, 1),
+                               enddate=datetime(2019, 9, 1)))
+    if (student_group.group_subdivision not in subdivision_oracle) or (
+            student_group.group_subdivision not in subdivisions_postgress):
+        break
+    else:
+        result.result_config.session.add(
+            result.Group_result(
+                id=student_group.group_id,
+                name=student_group.group_name,
+                year_name=toyear(student_group.year),
+                subdivision_name=student_group.group_subdivision,
+                specialization_id=student_group.group_specialization,
+                coursenumber=student_group.course_number
+            )
+        )
+    result.result_config.session.commit()
+
+maxPersonId = max(result.result_config.session.query(result.Person_result).all(), key=lambda x: x.id).id
+
+for student in student_postgress:
+    if student.group_id in result.result_config.session.query(result.Group_result).all():
+        maxPersonId = maxPersonId + 1
+        result_people[maxPersonId] = result.Person_result(
+            id=maxPersonId,
+            surname="Unknown",
+            name=student.student_name,
+            patronymic=None,
+            dateofbirth=datetime(1900, 1, 1),
+            placeofbirth="Unknown"
+        )
+        result.result_config.session.add(result_people[maxPersonId])
+        result.result_config.session.commit()
+        result.result_config.session.add(
+            result.Student_result(
+                id=student.student_id,
+                person_id=maxPersonId,
+                group_id=student.group_id,
+                type_of_study=student.type_of_study,
+                form_of_study=student.form_of_study,
+                qualification=student.qualification
+            )
+        )
+
+for semester in semester_postgress:
+    if semester.sem_specialization_id in result.result_config.session.query(result.Specialization_result).all():
+        result.result_config.session.add(
+            result.Semester_result(
+                id=semester.semester_id,
+                semester_name=str(semester.semester_num),
+                specialization_id=semester.sem_specialization_id))
+        result.result_config.session.commit()
+
+for subject in subject_postgress:
+    result.result_config.session.add(
+        result.Subject_result(
+            name=subject.subject_name,
+            ))
+    result.result_config.session.commit()
+
+for employee in employee_postgress:
+    if employee.t_subdivision_id in result.result_config.session.query(result.Subdivision_result).all():
+        maxPersonId = maxPersonId + 1
+        result_people[maxPersonId] = result.Person_result(
+            id=maxPersonId,
+            surname="Unknown",
+            name=employee.employee_name,
+            patronymic=None,
+            dateofbirth=datetime(1900, 1, 1),
+            placeofbirth="Unknown"
+        )
+        result.result_config.session.add(result_people[maxPersonId])
+        result.result_config.session.commit()
+        result.result_config.session.add(
+            result.Employee_result(
+                id=employee.employee_id,
+                person_id=maxPersonId,
+                subdivision_name=str(employee.t_subdivision_id),
+                position="Unknown",
+                startdate=datetime(1900, 1, 1),
+                enddate=datetime(1900, 1, 1)
+            )
+        )
+        result.result_config.session.commit()
+
+for sp in specialization_program_postgress:
+    if sp.sp_subject_name in result.result_config.session.query(result.Subject_result).all() and sp.sp_semester_id in result.result_config.session.query(result.Semester_result).all() and sp.main_teacher in result.result_config.session.query(result.Employee_result).all():
+        result.result_config.session.add(
+            result.Specialization_program_result(
+                id=sp.sp_id,
+                year_value=sp.year,
+                lectures=sp.lectures,
+                practices=sp.practises,
+                labs=sp.labs,
+                control_type=sp.control_type,
+                subject_name=sp.sp_subject_id,
+                semester_id=sp.sp_semester_id,
+                main_teacher=sp.main_teacher
+            )
+        )
+        result.result_config.session.commit()
 
 for student in students_collection:
     try:
