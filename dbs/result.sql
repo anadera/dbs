@@ -38,8 +38,8 @@ CREATE TABLE Employee (
   person_id number(10) NOT NULL,
   subdivision_name varchar2(25) ,
   position  varchar2(20),
-  startDate number(10),
-  endDate   number(10),
+  startDate date,
+  endDate   date,
   PRIMARY KEY (id),
   unique(person_id, subdivision_name));
 

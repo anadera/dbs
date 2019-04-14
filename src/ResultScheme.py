@@ -75,5 +75,3 @@ class ResultScheme:
         self.result_config.session.query(self.Semester_result).delete()
         self.result_config.session.query(self.Faculty_result).delete()
         self.result_config.session.query(self.University_result).delete()
-
-

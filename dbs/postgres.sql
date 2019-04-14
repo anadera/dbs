@@ -105,5 +105,5 @@ create table results
 	foreign key (sc_teacher_id) references employee (employee_id),
 	foreign key (sc_subject_id) references subject (subject_id),
 	foreign key (sc_student_id) references student (student_id),
-	unique (sc_subject_id,mark,sc_student_id,sc_teacher_id,resultDate)
+	unique (result_id, sc_subject_id,mark,sc_student_id,sc_teacher_id,resultDate)
 );
