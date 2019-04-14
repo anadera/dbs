@@ -9,6 +9,11 @@ class MongoScheme:
     def __init__(self, dbname):
         self.client = MongoClient()
         self.db = self.client[dbname]
+        self.campuses = self.db.campuses
+        self.persons = self.db.persons
+        self.rooms = self.db.rooms
+        self.tenants = self.db.tenants
+        self.id = 1
 
     # campuses
     def create_gen_campus(self):
@@ -17,10 +22,12 @@ class MongoScheme:
         campus_rtotal = 100
         #campus_roccup = 70
         campus = {
+            "id": self.id,
             "location": campus_loc,
             "rooms_total": campus_rtotal
         }
         result = campuses.insert_one(campus)
+        self.id = self.id + 1
         # campus_ref_key = result.inserted_id
         return campuses
 
@@ -36,6 +43,7 @@ class MongoScheme:
         person_education_from = ["2014", "2015", "2016", "2017", "2018"]
         for x in range(200):
             person = {
+                "id": self.id,
                 "surname": person_surnames[randrange(len(person_surnames))],
                 "name": person_names[randrange(len(person_names))],
                 "dateOfBirth": random_date(datetime.strptime('01/01/1985 01:00 AM', '%m/%d/%Y %I:%M %p'),
@@ -44,6 +52,7 @@ class MongoScheme:
                 #"education_from": person_education_from[randrange(len(person_education_from))]
             }
             result = persons.insert_one(person)
+            self.id = self.id + 1
         return persons
 
     # rooms
@@ -55,11 +64,12 @@ class MongoScheme:
         room_tcurrent = 2
         room_san_date = [datetime.strptime('01/01/2014 01:00 AM', '%m/%d/%Y %I:%M %p'),
                          datetime.strptime('01/01/2019 01:00 AM', '%m/%d/%Y %I:%M %p')]
-        room_san_bugs = ["yes", "no"]
+        room_san_bugs = ["y", "n"]
         for x in range(room_num):
             room = {
+                "id": self.id,
                 "room_number": x + 1,
-                "campus_id": ObjectId(cf[0]["_id"]),
+                "campus_id": cf[0]["id"],
                 "number_of_beds": randrange(2, room_ttotal),
                 #"tenants_current": randrange(1, room_tcurrent),
                 "sanitazation": {
@@ -68,6 +78,7 @@ class MongoScheme:
                 }
             }
             result = rooms.insert_one(room)
+            self.id = self.id + 1
         return rooms
 
     # tenants
@@ -79,14 +90,15 @@ class MongoScheme:
         tenants_warnings = 3
         rd = 1
         next = 0
-        for p in self.db.persons.find({}, {"_id": 1}):
+        for p in self.db.persons.find({}, {"id": 1}):
             rsd = random_date(tenants_residence[0], tenants_residence[1])
             red = random_date(rsd, tenants_residence[1])
             vsd = random_date(rsd, red)
             ved = random_date(vsd, red)
             pd = random_date(rsd, red)
             tenant = {
-                "person_id": p["_id"],
+                "id": self.id,
+                "person_id": p["id"],
                 "room_num": rd,
                 "startDate": rsd,
                 "endDate": red,
@@ -101,16 +113,17 @@ class MongoScheme:
                 #"warnings": randrange(tenants_warnings)
             }
             result = tenants.insert_one(tenant)
+            self.id = self.id + 1
             next = next + 1
             if next % 2 == 0:
                 rd = rd + 1
         return tenants
 
     def create_gen_db(self):
-        MongoScheme.create_gen_campus(self)
-        MongoScheme.create_gen_persons(self)
-        MongoScheme.create_gen_rooms(self)
-        MongoScheme.create_gen_tenants(self)
+        self.campuses = self.create_gen_campus()
+        self.persons = self.create_gen_persons()
+        self.rooms = self.create_gen_rooms()
+        self.tenants = self.create_gen_tenants()
         # for t in self.db.tenants.find():
         #     print(t)
         # print("\n")

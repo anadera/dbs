@@ -225,11 +225,11 @@ CREATE TABLE Subject (
 CREATE TABLE Teenant (
   id         number(10),
   person_id  number(10) NOT NULL ,
-  room_id    number(10) NOT NULL ,
+  room_num    number(10) NOT NULL ,
   start_date date NOT NULL ,
   end_date   date,
   PRIMARY KEY (id),
-  unique(person_id, room_id, start_date));
+  unique(person_id, room_num, start_date));
 
 CREATE TABLE University (
   id                      number(10),
@@ -277,7 +277,7 @@ ALTER TABLE Reading_list ADD CONSTRAINT FKReading_li445003 FOREIGN KEY (person_i
 ALTER TABLE Authors ADD CONSTRAINT FKAuthors974269 FOREIGN KEY (publication_id) REFERENCES Publication (id);
 ALTER TABLE Authors ADD CONSTRAINT FKAuthors514087 FOREIGN KEY (person_id) REFERENCES Person (id);
 ALTER TABLE Room ADD CONSTRAINT FKRoom887829 FOREIGN KEY (campus_id) REFERENCES Campus (id);
-ALTER TABLE Teenant ADD CONSTRAINT FKTeenant542541 FOREIGN KEY (room_id) REFERENCES Room (id);
+ALTER TABLE Teenant ADD CONSTRAINT FKTeenant542541 FOREIGN KEY (room_num) REFERENCES Room (room_number);
 ALTER TABLE Teenant ADD CONSTRAINT FKTeenant568183 FOREIGN KEY (person_id) REFERENCES Person (id);
 ALTER TABLE Sanitization ADD CONSTRAINT FKSanitzatio786620 FOREIGN KEY (room_id) REFERENCES Room (id);
 ALTER TABLE Payment ADD CONSTRAINT FKPayment431193 FOREIGN KEY (teenant_id) REFERENCES Teenant (id);

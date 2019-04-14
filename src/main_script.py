@@ -85,7 +85,7 @@ def generateStudentCollectionFromOracle(person):
         studentCollection.append(
             result.Student_result(id=student.id, person_id=student.person_id, group_id=student.group_id,
                                   type_of_study=student.type_of_study, form_of_study=student.form_of_study,
-                                  qualification=student.qualification))
+                                  qualification=student.qualification[:2]))
     return studentCollection
 
 
@@ -100,20 +100,20 @@ def generatePulicationInfo(publisher):
 
 
 mongo = MongoScheme('lab1_mongodb')
-#mongo.drop_db()
-#mongo.create_gen_db()
+# mongo.drop_db()
+# mongo.create_gen_db()
 
 postgres = PostgresScheme('postgresql://postgres:postgres@localhost:5432/postgresdb')
-#postgres.clear()
-#postgres.generate_data()
+# postgres.clear()
+# postgres.generate_data()
 
 mysql = MySqlScheme('mysql://root:root@localhost/sys')
-#mysql.clear()
-#mysql.generate_data(100, 100)
+# mysql.clear()
+# mysql.generate_data(100, 100)
 
 oracle = OracleScheme("oracle+cx_oracle://myschema:1234@localhost/orcl")
-#oracle.clear()
-#oracle.generate_data(100, 100)
+# oracle.clear()
+# oracle.generate_data(100, 100)
 
 result = ResultScheme('oracle+cx_oracle://newschema:1234@localhost/orcl')
 result.clear()
@@ -135,6 +135,26 @@ publishers_mysql = mysql.my_sql_config.session.query(mysql.Publisher_mysql).all(
 result_people = {}
 
 result.clear()
+
+for c in mongo.campuses.find():
+    result.result_config.session.add(
+        result.Campus_result(id=c["id"],
+                             location=c["location"],
+                             rooms_total=c["rooms_total"]))
+    result.result_config.session.commit()
+
+for r in mongo.rooms.find():
+    result.result_config.session.add(
+        result.Room_result(id=r["id"],
+                           room_number=r["room_number"],
+                           campus_id=r["campus_id"],
+                           number_of_beds=r["number_of_beds"]))
+    result.result_config.session.add(
+        result.Sanitization_result(id=r["id"],
+                                   bed_bugs=r["sanitazation"]["bed_bugs"],
+                                   date_of_procedure=r["sanitazation"]["date_of_procedure"],
+                                   room_id=r["id"]))
+    result.result_config.session.commit()
 
 for year in years_oracle:
     result.result_config.session.add(
@@ -200,17 +220,19 @@ for conference in conference_info_mysql:
                                                                    place=conference.place))
     result.result_config.session.commit()
 
+students_collection = []
 maxEmployeeId = max(oracle.oracle_config.session.query(oracle.Employee_oracle).all(), key=lambda x: x.id).id
 
 for person in persons_oracle:
+    students_collection = students_collection + generateStudentCollectionFromOracle(person)
     result_people[person.id] = result.Person_result(id=person.id,
                                                     surname=person.surname,
                                                     name=person.name,
                                                     patronymic=person.patronymic,
                                                     dateofbirth=person.date_of_birth,
                                                     placeofbirth=person.place_of_birth,
-                                                    employee_collection=generateEmployeesFromOracle(person),
-                                                    student_collection=generateStudentCollectionFromOracle(person))
+                                                    employee_collection=generateEmployeesFromOracle(person)
+                                                    )
 
 for person in persons_mysql:
     maxEmployeeId = maxEmployeeId + 1
@@ -226,10 +248,59 @@ for person in persons_mysql:
                                                         employee_collection=generateEmployeesFromMysql(
                                                             person,
                                                             maxEmployeeId) + original_person.employee_collection,
-                                                        authors_collection=original_person.authors_collection,
-                                                        reading_list_collection=original_person.reading_list_collection,
-                                                        conference_participants_collection=original_person.conference_participants_collection)
+                                                        authors_collection=generateAuthors(person),
+                                                        reading_list_collection=generateReadingList(person),
+                                                        conference_participants_collection=generateConferecneParticipants(
+                                                            person))
+
+for person in mongo.persons.find():
+    if person["id"] not in result_people.keys():
+        result_people[person["id"]] = result.Person_result(
+            id=person["id"],
+            surname=person["surname"],
+            name=person["name"],
+            patronymic=None,
+            dateofbirth=person["dateOfBirth"],
+            placeofbirth=person["placeOfBirth"]
+        )
 
 for person in result_people.values():
     result.result_config.session.add(person)
     result.result_config.session.commit()
+
+for t in mongo.tenants.find():
+    if t["person_id"] not in result_people.keys():
+        result_people[t["id"]] = result.Person_result(
+            id=t["id"],
+            surname="Unknown",
+            name="Unknown",
+            patronymic=None,
+            dateofbirth=t["startDate"],
+            placeofbirth="Unknown"
+        )
+        result.result_config.session.add(result_people[t["id"]])
+        result.result_config.session.commit()
+    result.result_config.session.add(
+            result.Teenant_result(id=t["id"],
+                                  person_id=t["person_id"],
+                                  room_num=t["room_num"],
+                                  start_date=t["startDate"],
+                                  end_date=t["endDate"]))
+    result.result_config.session.add(
+            result.Visit_result(id=t["id"],
+                                teenant_id=t["id"],
+                                start_date=t["visit"]["startDate"],
+                                end_date=t["visit"]["endDate"]))
+    result.result_config.session.add(
+            result.Payment_result(id=t["id"],
+                                  teenant_id=t["id"],
+                                  date_of_transaction=t["payment"]["date_of_transaction"],
+                                  sum=t["payment"]["sum"]))
+    result.result_config.session.commit()
+
+for student in students_collection:
+    try:
+        result.result_config.session.add(student)
+        result.result_config.session.commit()
+    except Exception:
+        continue
