@@ -2,6 +2,7 @@ from src.MongoScheme import MongoScheme
 from src.PostgresScheme import PostgresScheme
 from src.MySqlScheme import MySqlScheme
 from src.OracleScheme import OracleScheme
+from src.ResultScheme import  ResultScheme
 
 mongo = MongoScheme('lab1_mongodb')
 mongo.drop_db()
@@ -18,3 +19,6 @@ mysql.generate_data(100, 100)
 oracle = OracleScheme("oracle+cx_oracle://myschema:1234@localhost/orcl")
 oracle.clear()
 oracle.generate_data(100, 100)
+
+result = ResultScheme('oracle+cx_oracle://newschema:1234@localhost/orcl')
+result.clear()
