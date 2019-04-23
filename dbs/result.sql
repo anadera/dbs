@@ -41,7 +41,7 @@ CREATE TABLE Employee (
   startDate date,
   endDate   date,
   PRIMARY KEY (id),
-  unique(person_id, subdivision_name));
+  unique(id, person_id, subdivision_name));
 
 
 CREATE TABLE Faculty (
@@ -181,12 +181,12 @@ CREATE TABLE Semester (
   semester_name     varchar2(20) NOT NULL ,
   specialization_id number(10) NOT NULL ,
   PRIMARY KEY (id),
-  unique(semester_name, specialization_id));
+  unique(id, semester_name, specialization_id));
 
 CREATE TABLE Specialization (
   id         number(10),
   name       varchar2(25) NOT NULL,
-  code       varchar2(20) UNIQUE,
+  code       varchar2(20),
   program_id number(10),
   PRIMARY KEY (id));
 
@@ -263,9 +263,9 @@ ALTER TABLE Group_info ADD CONSTRAINT FKGroup238021 FOREIGN KEY (year_name) REFE
 ALTER TABLE Group_info ADD CONSTRAINT FKGroup413568 FOREIGN KEY (specialization_id) REFERENCES Specialization (id);
 ALTER TABLE Schedule ADD CONSTRAINT FKSchedule537344 FOREIGN KEY (teacher_id) REFERENCES Employee (id);
 ALTER TABLE Group_Schedule ADD CONSTRAINT FKGroup_Sche247036 FOREIGN KEY (group_id) REFERENCES Group_info (id);
-ALTER TABLE Group_Schedule ADD CONSTRAINT FKGroup_Sche29284 FOREIGN KEY (schedule_info) REFERENCES Schedule (id);
+ALTER TABLE Group_Schedule ADD CONSTRAINT FKGroup_Sche29284 FOREIGN KEY (schedule_id) REFERENCES Schedule (id);
 ALTER TABLE Specialization ADD CONSTRAINT FKSpecializa702220 FOREIGN KEY (program_id) REFERENCES Program (id);
-ALTER TABLE Project_members ADD CONSTRAINT FKProject_me705906 FOREIGN KEY (project_name) REFERENCES Scintific_project (name);
+ALTER TABLE Project_members ADD CONSTRAINT FKProject_me705906 FOREIGN KEY (project_name) REFERENCES Scientific_project (name);
 ALTER TABLE Project_members ADD CONSTRAINT FKProject_me550842 FOREIGN KEY (member_id) REFERENCES Employee (id);
 ALTER TABLE Conference_info ADD CONSTRAINT FKConfefrenc99924 FOREIGN KEY (conference_name) REFERENCES Conference (name);
 ALTER TABLE Conference_info ADD CONSTRAINT FKConfefrenc813049 FOREIGN KEY (publisher_id) REFERENCES Publisher (id);

@@ -102,20 +102,20 @@ def generatePulicationInfo(publisher):
 
 
 mongo = MongoScheme('lab1_mongodb')
-#mongo.drop_db()
-#mongo.create_gen_db()
+mongo.drop_db()
+mongo.create_gen_db()
 
 postgres = PostgresScheme('postgresql://postgres:postgres@localhost:5432/postgresdb')
-#postgres.clear()
-#postgres.generate_data()
+postgres.clear()
+postgres.generate_data()
 
 mysql = MySqlScheme('mysql://root:root@localhost/sys')
-#mysql.clear()
-#mysql.generate_data(100, 100)
+mysql.clear()
+mysql.generate_data(100, 100)
 
 oracle = OracleScheme("oracle+cx_oracle://myschema:1234@localhost/orcl")
-#oracle.clear()
-#oracle.generate_data(100, 100)
+oracle.clear()
+oracle.generate_data(100, 100)
 
 result = ResultScheme('oracle+cx_oracle://newschema:1234@localhost/orcl')
 result.clear()
@@ -126,6 +126,7 @@ subdivision_oracle = oracle.oracle_config.session.query(oracle.Subdivision_oracl
 subjects_oracle = oracle.oracle_config.session.query(oracle.Subject_oracle).all()
 programs_oracle = oracle.oracle_config.session.query(oracle.Program_oracle).all()
 group_oracle = oracle.oracle_config.session.query(oracle.Group_oracle).all()
+mark_oracle = oracle.oracle_config.session.query(oracle.Mark_oracle).all()
 specialization_oracle = oracle.oracle_config.session.query(oracle.Specialization_oracle).all()
 
 persons_mysql = mysql.my_sql_config.session.query(mysql.Person_mysql).all()
@@ -170,6 +171,11 @@ for r in mongo.rooms.find():
                                    bed_bugs=r["sanitazation"]["bed_bugs"],
                                    date_of_procedure=r["sanitazation"]["date_of_procedure"],
                                    room_id=r["id"]))
+    result.result_config.session.commit()
+
+for mark in mark_oracle:
+    result.result_config.session.add(
+        result.Mark_result(mark_value = mark.name, letter = mark.letter))
     result.result_config.session.commit()
 
 for year in years_oracle:
